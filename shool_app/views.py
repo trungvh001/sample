@@ -2,7 +2,10 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.shortcuts import redirect, render
-from .forms import LoginForm
+from django.urls import is_valid_path
+
+from shool_app.models import Truong
+from .forms import LoginForm, AddNewShoolForm
 # Create your views here.
 
 
@@ -16,6 +19,41 @@ def home(request):
 
     return render(request, 'index.html', context)
 
+def listshool(request):
+    listshool = Truong.objects.all()
+
+    context = {'listshool': listshool}
+
+    return render(request, 'listshool.html', context)
+
+def addnewshool(request):
+    form = AddNewShoolForm()
+    if request.method == 'POST':
+        form = AddNewShoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('listshool')
+    context = {
+        'typeform': 'Add New Shool',
+        'form': form
+    }
+    
+    return render(request, 'shoolform.html', context)
+
+def editshool(request, pk):
+    shool = Truong.objects.get(id=pk)
+    form = AddNewShoolForm(instance=shool)
+    if request.method == 'POST':
+        form = AddNewShoolForm(request.POST, instance=shool)
+        if form.is_valid():
+            form.save()
+        return redirect('listshool')
+    context = {
+        'typeform': 'Edit Shool',
+        'form': form
+    }
+    
+    return render(request, 'shoolform.html', context)
 
 def login(request):
     if request.method == 'POST':

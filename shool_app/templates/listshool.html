@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <h1>List Shool</h1>
+    <div>
+        <table style="width:100%" border='1'>
+            <tr>
+              <th>Name</th>
+              <th>Time Start</th>
+              <th>Max Person</th>
+              <th>Location</th>
+              <th>Edit</th>
+            </tr>
+            {% for shool in listshool %}
+            <tr>
+              <td>{{shool.name}}</td>
+              <td>{{shool.time_start}}</td>
+              <td>{{shool.max_person}}</td>
+              <td>{{shool.location}}</td>
+              <td><a href="{% url 'editshool' shool.id%}">Edit</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+    </div>
+    <div>
+        <p><a href="{% url 'addnewshool' %}">Add New Shool</a></p>
+    </div>
+</body>
+
+</html>

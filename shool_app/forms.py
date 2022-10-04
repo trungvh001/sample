@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from .models import Truong
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -11,5 +12,7 @@ class LoginForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-class AddNewtruongForm(forms.Form):
-    pass
+class AddNewShoolForm(ModelForm):
+    class Meta:
+        model = Truong
+        fields = ['name', 'time_start', 'max_person', 'location']

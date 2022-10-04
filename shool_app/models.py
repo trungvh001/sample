@@ -66,7 +66,7 @@ class Truong(models.Model):
     location = models.CharField(max_length=255)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
-                                  default=None,
+                                  default=1,
                                   null=True,
                                   blank=True
                                   )

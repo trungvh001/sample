@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+
+  <body>
+    <div>
+      <h1>{{typeform}}</h1>
+      <form method="POST">
+        {% csrf_token %} 
+        <p>{{form.as_p}}</p>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </body>
+</html>

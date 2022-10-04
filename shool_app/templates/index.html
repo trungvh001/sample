@@ -10,8 +10,8 @@
     <div class="row">
         {% if user.is_authenticated %}
             Hi {{ user.username }}! <br />
-
-            <a href="{% url 'logout' %}">Log Out</a>
+            <p><a href="{% url 'listshool' %}">Danh sach truong hoc</a></p>
+            <p><a href="{% url 'logout' %}">Log Out</a></p>
         {% else %}
             <p>You are not logged in</p>
             <a href="{% url 'login' %}">Log In</a>
