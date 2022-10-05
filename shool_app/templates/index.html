@@ -11,6 +11,13 @@
         {% if user.is_authenticated %}
             Hi {{ user.username }}! <br />
             <p><a href="{% url 'listshool' %}">Danh sach truong hoc</a></p>
+            <p><a href="{% url 'listdepartment' %}">Danh sach Khoa</a></p>
+            <p><a href="{% url 'listclass' %}">Danh sach Lop</a></p>
+            {%if user.is_staff%}
+            <p><a href="{% url 'listuser' %}">Danh sach user</a></p>
+            {%else%}
+            <a href="{% url 'edituser' user.id%}">Edit</a>
+            {%endif%}
             <p><a href="{% url 'logout' %}">Log Out</a></p>
         {% else %}
             <p>You are not logged in</p>

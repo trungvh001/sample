@@ -1,0 +1,52 @@
+
+
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <h1>List User</h1>
+    <div>
+        <table style="width:100%" border='1'>
+            <tr>
+              <th>id</th>
+              <th>UserName</th>
+              <th>Email</th>
+              <th>Full Name</th>
+              <th>Role</th>
+              <th>Date Of Birth</th>
+              <th>Location</th>
+              <th>Is Active</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+            {% for useritem in listuser %}
+            <tr>
+              <td>{{useritem.id}}</td>
+              <td>{{useritem.username}}</td>
+              <td>{{useritem.email}}</td>
+              <td>{{useritem.full_name}}</td>
+              <td>{{useritem.get_role_display}}</td>
+              <td>{{useritem.date_of_birth}}</td>
+              <td>{{useritem.location}}</td>
+              <td>{{useritem.is_active}}</td>
+              {%if not useritem.is_staff %}
+              <td><a href="{% url 'edituser' useritem.id%}">Edit</a></td>
+              <td><a href="{% url 'deleteuser' useritem.id%}">Delete</a></td>
+              {%endif%}
+            </tr>
+            {% endfor %}
+          </table>
+    </div>
+    <div>
+        <p><a href="{% url 'addnewuser' %}">Add New User</a></p>
+        <p><a href="{% url 'home' %}">Go Back</a></p>
+    </div>
+</body>
+
+</html>

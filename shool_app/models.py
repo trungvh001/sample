@@ -1,4 +1,5 @@
 
+from enum import unique
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
@@ -16,7 +17,6 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, username, password, **extra_fields):
         if not username:
             raise ValueError(_('The username must be set'))
-        username = self.normalize_email(username)
         user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save()
@@ -55,9 +55,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
+    def __str__(self):
+        return self.username
+
 
 class Truong(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     time_start = models.DateField(null=True)
     max_person = models.IntegerField(
         validators=[
@@ -70,26 +73,30 @@ class Truong(models.Model):
                                   null=True,
                                   blank=True
                                   )
-
+    def __str__(self):
+        return self.name
 class Khoa(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     department = models.CharField(choices=enums.department_choices, max_length=3, null=True, blank=True)
     max_person = models.IntegerField(null=True, blank=True)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
-                                  default=None,
+                                  default=1,
                                   null=True,
                                   blank=True
                                   )
     createdate = models.DateTimeField(default=timezone.now)
-
+    def __str__(self):
+        return self.name
 class Lop(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     max_person = models.IntegerField(null=True, blank=True)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
-                                  default=None,
+                                  default=1,
                                   null=True,
                                   blank=True
                                   )
     createdate = models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.name

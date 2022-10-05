@@ -6,28 +6,24 @@
   </head>
 
   <body>
-    <h1>List Shool</h1>
+    <h1>List class</h1>
     <div>
       <table style="width: 100%" border="1">
         <tr>
           <th>Name</th>
-          <th>Time Start</th>
           <th>Max Person</th>
-          <th>Location</th>
           {%if user.is_staff%}
           <th>Edit</th>
           <th>Delete</th>
           {%endif%}
         </tr>
-        {% for shool in listshool %}
+        {% for class in listclass %}
         <tr>
-          <td>{{shool.name}}</td>
-          <td>{{shool.time_start}}</td>
-          <td>{{shool.max_person}}</td>
-          <td>{{shool.location}}</td>
+          <td>{{class.name}}</td>
+          <td>{{class.max_person}}</td>
           {%if user.is_staff%}
-          <td><a href="{% url 'editshool' shool.id%}">Edit</a></td>
-          <td><a href="{% url 'deleteshool' shool.id%}">Delete</a></td>
+          <td><a href="{% url 'editclass' class.id%}">Edit</a></td>
+          <td><a href="{% url 'deleteclass' class.id%}">Delete</a></td>
           {%endif%}
         </tr>
         {% endfor %}
@@ -35,7 +31,7 @@
     </div>
     <div>
       {%if user.is_staff%}
-      <p><a href="{% url 'addnewshool' %}">Add New Shool</a></p>
+      <p><a href="{% url 'addnewclass' %}">Add New class</a></p>
       {%endif%}
       <p><a href="{% url 'home' %}">Go Back</a></p>
     </div>

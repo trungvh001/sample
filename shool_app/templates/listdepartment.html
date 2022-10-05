@@ -1,0 +1,44 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <h1>List Department</h1>
+    <div>
+        <table style="width:100%" border='1'>
+            <tr>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Max Person</th>
+              {%if user.is_staff%}
+              <th>Edit</th>
+              <th>Delete</th>
+              {%endif%}
+            </tr>
+            {% for department in listdepartment %}
+            <tr>
+              <td>{{department.name}}</td>
+              <td>{{department.get_department_display}}</td>
+              <td>{{department.max_person}}</td>
+              {%if user.is_staff%}
+                <td><a href="{% url 'editdepartment' department.id%}">Edit</a></td>
+                <td><a href="{% url 'deletedepartment' department.id%}">Delete</a></td>
+              {%endif%}
+            </tr>
+            {% endfor %}
+          </table>
+    </div>
+    <div>
+        {%if user.is_staff%}
+          <p><a href="{% url 'addnewdepartment' %}">Add New Department</a></p>
+        {%endif%}
+        <p><a href="{% url 'home' %}">Go Back</a></p>
+    </div>
+</body>
+
+</html>
