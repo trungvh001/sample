@@ -20,6 +20,9 @@ urlpatterns = [
     path('addnewuser/', views.addnew_user, name='addnewuser'),
     path('edituser/<str:pk>', views.edit_user, name='edituser'),
     path('deleteuser/<str:pk>', views.delete_user, name='deleteuser'),
+    path('liststudent/', views.list_student, name='liststudent'),
+    path('addnewstudent/', views.addnew_studentclass, name='addnewstudent'),
+    path('editstudent/<str:pk>', views.edit_studentclass, name='editstudent'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
 ]

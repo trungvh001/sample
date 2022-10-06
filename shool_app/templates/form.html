@@ -12,6 +12,7 @@
         {% csrf_token %} 
         <p>{{form.as_p}}</p>
         <button type="submit">Save</button>
+        <p>{{error}}</p>
       </form>
     </div>
   </body>

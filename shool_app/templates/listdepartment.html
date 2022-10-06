@@ -15,6 +15,7 @@
               <th>Name</th>
               <th>Department</th>
               <th>Max Person</th>
+              <th>Shool</th>
               {%if user.is_staff%}
               <th>Edit</th>
               <th>Delete</th>
@@ -25,6 +26,7 @@
               <td>{{department.name}}</td>
               <td>{{department.get_department_display}}</td>
               <td>{{department.max_person}}</td>
+              <td>{{department.shool}}</td>
               {%if user.is_staff%}
                 <td><a href="{% url 'editdepartment' department.id%}">Edit</a></td>
                 <td><a href="{% url 'deletedepartment' department.id%}">Delete</a></td>

@@ -15,6 +15,7 @@
             <p><a href="{% url 'listclass' %}">Danh sach Lop</a></p>
             {%if user.is_staff%}
             <p><a href="{% url 'listuser' %}">Danh sach user</a></p>
+            <p><a href="{% url 'liststudent' %}">Danh sach hoc sinh</a></p>
             {%else%}
             <a href="{% url 'edituser' user.id%}">Edit</a>
             {%endif%}

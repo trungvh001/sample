@@ -23,13 +23,13 @@ class ShoolForm(ModelForm):
 class DepartmentForm(ModelForm):
     class Meta:
         model = Khoa
-        fields = ['name', 'department', 'max_person']
+        fields = ['name', 'department', 'max_person', 'shool']
 
 
 class ClassForm(ModelForm):
     class Meta:
         model = Lop
-        fields = ['name', 'max_person']
+        fields = ['name', 'max_person', 'department']
 
 
 class UserCreateForm(ModelForm):
@@ -44,3 +44,14 @@ class UserEditForm(ModelForm):
         model = CustomUser
         fields = ['username', 'email', 'full_name', 'role',
                   'date_of_birth', 'location', 'is_active']
+
+
+class StudentForm(forms.Form):
+    student = forms.ChoiceField(choices=[
+    (choice.pk, choice) for choice in CustomUser.objects.filter(role='01')],required=True)
+    classname = forms.ChoiceField(choices=[
+    (choice.pk, choice) for choice in Lop.objects.all()],required=True)
+
+class StudentEditForm(forms.Form):
+    classname = forms.ChoiceField(choices=[
+    (choice.pk, choice) for choice in Lop.objects.all()],required=True)
