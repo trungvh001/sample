@@ -1,0 +1,21 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <div class="row">
+        {% if user.is_authenticated %}
+        {% block body %}{% endblock body %} 
+        {% else %}
+            <p>You are not logged in</p>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    </div>
+</body>
+
+</html>

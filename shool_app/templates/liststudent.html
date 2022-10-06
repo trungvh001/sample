@@ -1,13 +1,7 @@
 
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-</head>
-
-<body>
+{% block body %}
     <h1>List Student</h1>
     <div>
         <table style="width:100%" border='1'>
@@ -33,6 +27,4 @@
         <p><a href="{% url 'addnewstudent' %}">Add New User</a></p>
         <p><a href="{% url 'home' %}">Go Back</a></p>
     </div>
-</body>
-
-</html>
+{% endblock body %}

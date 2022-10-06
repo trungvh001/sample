@@ -111,12 +111,11 @@ class Lop(models.Model):
     createdate = models.DateTimeField(default=timezone.now)
     department = models.ForeignKey(
         Khoa, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-
     def __str__(self):
         return self.name
 
 
-class StudentClass(models.Model):
+class StudentManagement(models.Model):
     student = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE)
     classname = models.ForeignKey(

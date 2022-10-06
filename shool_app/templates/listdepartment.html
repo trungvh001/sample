@@ -1,13 +1,7 @@
 
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-</head>
-
-<body>
+{% block body %}
     <h1>List Department</h1>
     <div>
         <table style="width:100%" border='1'>
@@ -41,6 +35,4 @@
         {%endif%}
         <p><a href="{% url 'home' %}">Go Back</a></p>
     </div>
-</body>
-
-</html>
+{% endblock body %}

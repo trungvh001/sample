@@ -1,11 +1,6 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-  </head>
-
-  <body>
+{% block body %}
     <div>
       <h1>{{typeform}}</h1>
       <form method="POST">
@@ -15,5 +10,4 @@
         <p>{{error}}</p>
       </form>
     </div>
-  </body>
-</html>
+{% endblock body %}

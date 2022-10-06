@@ -6,7 +6,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.shortcuts import redirect, render
 from django.urls import is_valid_path
 from django.core.exceptions import ObjectDoesNotExist
-from shool_app.models import CustomUser, Khoa, Lop, StudentClass, Truong
+from shool_app.models import CustomUser, Khoa, Lop, StudentManagement, Truong
 from .forms import ClassForm, DepartmentForm, LoginForm, ShoolForm, StudentEditForm, StudentForm, UserCreateForm, UserEditForm
 # Create your views here.
 
@@ -18,7 +18,6 @@ def home(request):
             "user": request.user
         }
     return render(request, 'index.html', context)
-
 
 def login(request):
     if request.method == 'POST':
@@ -45,7 +44,7 @@ def logout(request):
     return redirect('/login')
 
 
-def listshool(request):
+def list_shool(request):
     listshool = Truong.objects.all()
     context = {
         "user": request.user,
@@ -53,7 +52,7 @@ def listshool(request):
     return render(request, 'listshool.html', context)
 
 
-def addnewshool(request):
+def add_new_shool(request):
     form = ShoolForm()
     if request.method == 'POST':
         form = ShoolForm(request.POST)
@@ -67,7 +66,7 @@ def addnewshool(request):
     return render(request, 'form.html', context)
 
 
-def editshool(request, pk):
+def edit_shool(request, pk):
     shool = Truong.objects.get(id=pk)
     form = ShoolForm(instance=shool)
     if request.method == 'POST':
@@ -101,7 +100,7 @@ def list_department(request):
     return render(request, 'listdepartment.html', context)
 
 
-def addnew_department(request):
+def add_new_department(request):
     form = DepartmentForm()
     if request.method == 'POST':
         form = DepartmentForm(request.POST)
@@ -217,7 +216,7 @@ def list_class(request):
     return render(request, 'listclass.html', context)
 
 
-def addnew_class(request):
+def add_new_class(request):
     form = ClassForm()
     if request.method == 'POST':
         form = ClassForm(request.POST)
@@ -312,7 +311,7 @@ def list_user(request):
     return render(request, 'listuser.html', context)
 
 
-def addnew_user(request):
+def add_new_user(request):
     form = UserCreateForm()
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
@@ -369,14 +368,14 @@ def delete_user(request, pk):
     return render(request, 'deleteconfirm.html', context)
 
 def list_student(request):
-    list_student = StudentClass.objects.all()
+    list_student = StudentManagement.objects.all()
     context = {
         'liststudent': list_student
     }
     return render(request, 'liststudent.html', context)
 
 
-def addnew_studentclass(request):
+def add_student_to_class(request):
     form = StudentForm()
     if request.method == 'POST':
         form = StudentForm(request.POST)
@@ -385,11 +384,11 @@ def addnew_studentclass(request):
             student = CustomUser.objects.get(id=data['student'])
             classname = Lop.objects.get(id=data['classname'])
             try:
-                check_exit = StudentClass.objects.get(student=student)
+                check_exit = StudentManagement.objects.get(student=student)
             except ObjectDoesNotExist:
                 check_exit = None
             if not check_exit:
-                newstudent = StudentClass(student=student, classname=classname)
+                newstudent = StudentManagement(student=student, classname=classname)
                 newstudent.save()
             else:
                 context = {
@@ -405,15 +404,15 @@ def addnew_studentclass(request):
     }
     return render(request, 'form.html', context)
 
-def edit_studentclass(request, pk):
-    studentclass = StudentClass.objects.get(id=pk)
+def edit_student_in_class(request, pk):
+    studentclass = StudentManagement.objects.get(id=pk)
     form = StudentEditForm(initial={'classname': studentclass.classname.id})
     if request.method == 'POST':
         form = StudentEditForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             classname = Lop.objects.get(id=data['classname'])
-            StudentClass.objects.filter(id=pk).update(classname=classname)
+            StudentManagement.objects.filter(id=pk).update(classname=classname)
         return redirect('liststudent')
     context = {
         'typeform': 'Edit student {namestudent} in Class'.format(namestudent=studentclass.student.username),
