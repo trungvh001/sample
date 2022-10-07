@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import is_valid_path
 from django.core.exceptions import ObjectDoesNotExist
 from shool_app.models import CustomUser, Khoa, Lop, StudentManagement, Truong
+from shool_app.util import check_class_create, check_class_edit, check_department_create, check_department_edit
 from .forms import ClassForm, DepartmentForm, LoginForm, ShoolForm, StudentEditForm, StudentForm, UserCreateForm, UserEditForm
 # Create your views here.
 
@@ -106,38 +107,21 @@ def add_new_department(request):
         form = DepartmentForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            if form_data['shool']:
-                shool = Truong.objects.get(pk=form_data['shool'].id)
-                error_limit = False
-                error_department = False
-                if shool.max_person < form_data['max_person']:
-                    error_limit = True
-                else:
-                    list_department = Khoa.objects.filter(
-                        shool=form_data['shool'])
-                    count = 0
-                    for dep_item in list_department:
-                        if dep_item.department == form_data['department']:
-                            error_department = True
-                            break
-                        count += dep_item.max_person
-                    count += form_data['max_person']
-                    if count > shool.max_person and error_department == False:
-                        error_limit = True
-                if error_limit:
-                    context = {
-                        'typeform': 'Edit Department',
-                        'form': form,
-                        'error': 'Sức chứa của khoa k được vượt quá sức chứa của trường'
-                    }
-                    return render(request, 'form.html', context)
-                elif error_department:
-                    context = {
-                        'typeform': 'Add New Department',
-                        'form': form,
-                        'error': 'Khoa {department} đã tồn tại trong trường'.format(department=form_data['department'])
-                    }
-                    return render(request, 'form.html', context)
+            error_department, error_limit = check_department_create(form_data) 
+            if error_limit:
+                context = {
+                    'typeform': 'Edit Department',
+                    'form': form,
+                    'error': 'Sức chứa của khoa k được vượt quá sức chứa của trường'
+                }
+                return render(request, 'form.html', context)
+            elif error_department:
+                context = {
+                    'typeform': 'Add New Department',
+                    'form': form,
+                    'error': 'Khoa {department} đã tồn tại trong trường'.format(department=form_data['department'])
+                }
+                return render(request, 'form.html', context)
             form.save()
         return redirect('listdepartment')
     context = {
@@ -154,40 +138,21 @@ def edit_department(request, pk):
         form = DepartmentForm(request.POST, instance=department)
         if form.is_valid():
             form_data = form.cleaned_data
-            if form_data['shool']:
-                shool = Truong.objects.get(pk=form_data['shool'].id)
-                error_limit = False
-                error_department = False
-                if shool.max_person < form_data['max_person']:
-                    error_limit = True
-                else:
-                    list_department = Khoa.objects.filter(
-                        shool=form_data['shool'])
-                    count = 0
-                    for dep_item in list_department:
-                        if dep_item.department == form_data['department']:
-                            error_department = True
-                            break
-                        if dep_item.id == pk:
-                            count += form_data['max_person']
-                        else:
-                            count += dep_item.max_person
-                    if count > shool.max_person and error_department == False:
-                        error_limit = True
-                if error_limit:
-                    context = {
-                        'typeform': 'Edit Department',
-                        'form': form,
-                        'error': 'Sức chứa của khoa k được vượt quá sức chứa của trường'
-                    }
-                    return render(request, 'form.html', context)
-                elif error_department:
-                    context = {
-                        'typeform': 'Edit Department',
-                        'form': form,
-                        'error': 'Khoa đã tồn tại trong trường'
-                    }
-                    return render(request, 'form.html', context)
+            error_department, error_limit = check_department_edit(form_data, pk) 
+            if error_limit:
+                context = {
+                    'typeform': 'Edit Department',
+                    'form': form,
+                    'error': 'Sức chứa của khoa k được vượt quá sức chứa của trường'
+                }
+                return render(request, 'form.html', context)
+            elif error_department:
+                context = {
+                    'typeform': 'Edit Department',
+                    'form': form,
+                    'error': 'Khoa đã tồn tại trong trường'
+                }
+                return render(request, 'form.html', context)
             form.save()
         return redirect('listdepartment')
     context = {
@@ -222,27 +187,14 @@ def add_new_class(request):
         form = ClassForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            if form_data['department']:
-                department = Khoa.objects.get(pk=form_data['department'].id)
-                error_limit = False
-                if department.max_person < form_data['max_person']:
-                    error_limit = True
-                else:
-                    list_class = Lop.objects.filter(
-                        department=form_data['department'])
-                    count = 0
-                    for class_item in list_class:
-                        count += class_item.max_person
-                    count += form_data['max_person']
-                    if count > department.max_person:
-                        error_limit = True
-                if error_limit:
-                    context = {
-                        'typeform': 'Add New Department',
-                        'form': form,
-                        'error': 'Sức chứa của lớp k được vượt quá sức chứa của khoa'
-                    }
-                    return render(request, 'form.html', context)
+            error_limit = check_class_create(form_data)
+            if error_limit:
+                context = {
+                    'typeform': 'Add New Department',
+                    'form': form,
+                    'error': 'Sức chứa của lớp k được vượt quá sức chứa của khoa'
+                }
+                return render(request, 'form.html', context)
             form.save()
         return redirect('listclass')
     context = {
@@ -259,29 +211,14 @@ def edit_class(request, pk):
         form = ClassForm(request.POST, instance=classInstance)
         if form.is_valid():
             form_data = form.cleaned_data
-            if form_data['department']:
-                department = Khoa.objects.get(pk=form_data['department'].id)
-                error_limit = False
-                if department.max_person < form_data['max_person']:
-                    error_limit = True
-                else:
-                    list_class = Lop.objects.filter(
-                        department=form_data['department'])
-                    count = 0
-                    for class_item in list_class:
-                        if class_item.id == pk:
-                            count += form_data['max_person']
-                        else:
-                            count += class_item.max_person
-                    if count > department.max_person:
-                        error_limit = True
-                if error_limit:
-                    context = {
-                        'typeform': 'Add New Department',
-                        'form': form,
-                        'error': 'Sức chứa của lớp k được vượt quá sức chứa của khoa'
-                    }
-                    return render(request, 'form.html', context)
+            error_limit = check_class_edit(form_data, pk)
+            if error_limit:
+                context = {
+                    'typeform': 'Add New Department',
+                    'form': form,
+                    'error': 'Sức chứa của lớp k được vượt quá sức chứa của khoa'
+                }
+                return render(request, 'form.html', context)
             form.save()
         return redirect('listclass')
     context = {

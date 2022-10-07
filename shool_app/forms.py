@@ -29,7 +29,7 @@ class DepartmentForm(ModelForm):
 class ClassForm(ModelForm):
     class Meta:
         model = Lop
-        fields = ['name', 'max_person', 'department']
+        fields = ['name', 'max_person', 'department', 'shool']
 
 
 class UserCreateForm(ModelForm):

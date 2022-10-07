@@ -68,6 +68,7 @@ class Truong(models.Model):
         validators=[
             MaxValueValidator(1000)
         ])
+    person = models.IntegerField(null=True, blank=True)
     location = models.CharField(max_length=255)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
@@ -85,6 +86,7 @@ class Khoa(models.Model):
     department = models.CharField(
         choices=enums.department_choices, max_length=3, null=True, blank=True)
     max_person = models.IntegerField(null=True, blank=True)
+    person = models.IntegerField(null=True, blank=True)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
                                   default=1,
@@ -102,6 +104,7 @@ class Khoa(models.Model):
 class Lop(models.Model):
     name = models.CharField(max_length=255, unique=True)
     max_person = models.IntegerField(null=True, blank=True)
+    person = models.IntegerField(null=True, blank=True)
     create_by = models.ForeignKey(CustomUser,
                                   on_delete=models.CASCADE,
                                   default=1,
@@ -111,6 +114,8 @@ class Lop(models.Model):
     createdate = models.DateTimeField(default=timezone.now)
     department = models.ForeignKey(
         Khoa, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    shool = models.ForeignKey(
+        Truong, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     def __str__(self):
         return self.name
 
